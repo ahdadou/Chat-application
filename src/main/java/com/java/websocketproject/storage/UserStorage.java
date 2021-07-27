@@ -2,6 +2,7 @@ package com.java.websocketproject.storage;
 
 import org.apache.catalina.User;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class UserStorage {
@@ -9,27 +10,25 @@ public class UserStorage {
     private static UserStorage instance;
     private Set<String> users;
 
-    private UserStorage(){
+    private UserStorage() {
+        users = new HashSet<>();
+    }
 
+    public static synchronized UserStorage getInstance() {
+        if (instance == null) {
+            instance = new UserStorage();
+        }
+        return instance;
     }
 
     public Set<String> getUsers() {
-
         return users;
     }
 
-    public void setUsers(String user) throws Exception {
-        if(users.contains(user)){
-            throw  new Exception("User already exists with username" + user);
+    public void setUser(String userName) throws Exception {
+        if (users.contains(userName)) {
+            throw new Exception("User aready exists with userName: " + userName);
         }
-        users.add(user);
+        users.add(userName);
     }
-
-    public static synchronized UserStorage getInstance(){
-        if(instance==null){
-            instance = new UserStorage();
-        }
-        return  instance;
-    }
-
 }
